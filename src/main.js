@@ -343,12 +343,13 @@ function renderSearchResults(query) {
 
 function setActiveSearchResult(index) {
   if (searchMatches.length === 0) return;
-  activeSearchIndex = (index + searchMatches.length) % searchMatches.length;
+  activeSearchIndex = index < 0 ? searchMatches.length - 1 : index % searchMatches.length;
   const options = elements.searchResults.querySelectorAll(".search-option");
   options.forEach((option, optionIndex) => {
     const active = optionIndex === activeSearchIndex;
     option.classList.toggle("is-active", active);
     option.setAttribute("aria-selected", String(active));
+    if (active) option.scrollIntoView({ block: "nearest" });
   });
   elements.search.setAttribute("aria-activedescendant", `search-option-${activeSearchIndex}`);
 }
@@ -381,7 +382,10 @@ async function start() {
       ? linkedRight
       : closestPlaces(currentLeft)[0].place;
     placeSearch = new Fuse(places, {
-      keys: ["name", "parentName"],
+      keys: [
+        { name: "name", weight: 0.8 },
+        { name: "parentName", weight: 0.2 }
+      ],
       threshold: 0.35,
       minMatchCharLength: 2,
       ignoreLocation: true
@@ -401,9 +405,9 @@ async function start() {
       } else if (event.key === "ArrowUp") {
         event.preventDefault();
         setActiveSearchResult(activeSearchIndex - 1);
-      } else if (event.key === "Enter" && activeSearchIndex >= 0) {
+      } else if (event.key === "Enter" && searchMatches.length > 0) {
         event.preventDefault();
-        chooseSearchResult(searchMatches[activeSearchIndex]);
+        chooseSearchResult(searchMatches[Math.max(0, activeSearchIndex)]);
       } else if (event.key === "Escape") {
         closeSearch();
       }
