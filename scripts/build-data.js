@@ -11,7 +11,7 @@ import { countries } from "./countries.js";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const rawDir = path.join(root, "data", "raw");
 const outputDir = path.join(root, "public", "data");
-const simplifyPercentage = "1%";
+const simplifyPercentage = "2%";
 
 function getId(countryCode, boundaryLevel, properties) {
   const identifier = properties.shapeISO || properties.shapeID || properties.shapeName;
