@@ -1,0 +1,25 @@
+{
+  "name": "same-size",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "data": "node scripts/build-data.js"
+  },
+  "dependencies": {
+    "@turf/area": "^7.2.0",
+    "@turf/boolean-point-in-polygon": "^7.2.0",
+    "@turf/centroid": "^7.2.0",
+    "@turf/point-on-feature": "^7.2.0",
+    "d3-geo": "^3.1.1",
+    "fuse.js": "^7.1.0",
+    "mapshaper": "^0.7.101",
+    "topojson-client": "^3.1.0"
+  },
+  "devDependencies": {
+    "vite": "^6.4.1"
+  }
+}
