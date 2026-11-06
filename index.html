@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f5f4ef" />
+    <meta name="description" content="Compare the true land areas of cities and provinces." />
+    <title>Same Size — Compare places by true area</title>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="wordmark" href="./" aria-label="Same Size home">
+          <span class="wordmark-icon" aria-hidden="true">≈</span>
+          <span>same size</span>
+        </a>
+        <p class="header-note">A more grounded way to compare places.</p>
+      </header>
+
+      <main>
+        <section class="intro">
+          <p class="eyebrow">LAND AREA, WITHOUT THE DISTORTION</p>
+          <h1>How big is <span>big?</span></h1>
+          <p class="intro-copy">Compare the true shapes and areas of cities and provinces.</p>
+        </section>
+
+        <section class="controls" aria-label="Comparison controls">
+          <div class="control-actions">
+            <button id="shuffle-button" class="button button-dark" type="button">
+              <span aria-hidden="true">⤨</span> Shuffle
+            </button>
+            <label class="search-box">
+              <span class="sr-only">Search places</span>
+              <input
+                id="place-search"
+                type="search"
+                placeholder="Search a place…"
+                autocomplete="off"
+                role="combobox"
+                aria-autocomplete="list"
+                aria-controls="search-results"
+                aria-expanded="false"
+              />
+              <span class="search-icon" aria-hidden="true">⌕</span>
+              <div id="search-results" class="search-results" role="listbox" hidden></div>
+            </label>
+            <label class="filter-box">
+              <span>Show</span>
+              <select id="place-filter">
+                <option value="both">All places</option>
+                <option value="province">Provinces</option>
+                <option value="city">Cities</option>
+              </select>
+            </label>
+            <div class="view-toggle" aria-label="Comparison view">
+              <button class="view-button is-active" data-view="side-by-side" type="button" aria-pressed="true">
+                Side by side
+              </button>
+              <button class="view-button" data-view="overlay" type="button" aria-pressed="false">
+                Overlay
+              </button>
+            </div>
+          </div>
+          <p id="status-message" class="status-message" role="status" aria-live="polite"></p>
+        </section>
+
+        <section id="comparison-stage" class="comparison-stage" aria-label="Place comparison">
+          <article id="left-card" class="place-card">
+            <div class="place-heading">
+              <div>
+                <p class="card-label"><span class="dot dot-coral"></span> YOUR PLACE</p>
+                <h2 id="left-name">Loading…</h2>
+                <p id="left-parent" class="place-parent"></p>
+              </div>
+              <div class="area-value">
+                <strong id="left-area"></strong>
+                <span>km²</span>
+              </div>
+            </div>
+            <div class="shape-visual">
+              <svg id="left-canvas" role="img"></svg>
+            </div>
+            <div class="place-foot">
+              <span id="left-square-miles" class="secondary-area"></span>
+              <span class="place-country">Philippines</span>
+            </div>
+          </article>
+
+          <div class="comparison-mark" aria-hidden="true">↔</div>
+
+          <article id="right-card" class="place-card">
+            <div class="place-heading">
+              <div>
+                <p class="card-label"><span class="dot dot-blue"></span><span id="right-card-label">CLOSEST IN AREA</span></p>
+                <h2 id="right-name">Loading…</h2>
+                <p id="right-parent" class="place-parent"></p>
+              </div>
+              <div class="area-value">
+                <strong id="right-area"></strong>
+                <span>km²</span>
+              </div>
+            </div>
+            <div class="shape-visual">
+              <svg id="right-canvas" role="img"></svg>
+            </div>
+            <div class="place-foot">
+              <span id="right-square-miles" class="secondary-area"></span>
+              <span class="place-country">Philippines</span>
+            </div>
+          </article>
+
+          <section id="overlay-panel" class="overlay-panel" aria-label="Overlay comparison" hidden>
+            <div class="overlay-caption">Both shapes are centered on their own geographic centroid.</div>
+            <svg id="overlay-canvas" role="img"></svg>
+            <div class="overlay-legend">
+              <span><i class="dot dot-coral"></i><span id="overlay-left-label"></span></span>
+              <span><i class="dot dot-blue"></i><span id="overlay-right-label"></span></span>
+            </div>
+          </section>
+        </section>
+
+        <section class="comparison-summary" aria-live="polite">
+          <p id="size-comparison"></p>
+          <p id="difference-label" class="difference-label"></p>
+        </section>
+
+        <section class="similar-section">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">CLOSE MATCHES</p>
+              <h2>Similar in size</h2>
+            </div>
+            <p class="section-note">The five places with the closest land area.</p>
+          </div>
+          <div id="similar-list" class="similar-list"></div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <p>Boundary data: <a href="https://www.geoboundaries.org/" target="_blank" rel="noreferrer">geoBoundaries</a>, Philippines ADM2/ADM3 (2020).</p>
+        <p>Licensed under <a href="https://creativecommons.org/licenses/by/3.0/igo/" target="_blank" rel="noreferrer">CC BY 3.0 IGO</a>. Areas calculated from source boundaries.</p>
+      </footer>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
