@@ -413,7 +413,7 @@ button {
 }
 
 .shape-visual {
-  height: clamp(225px, 30vw, 345px);
+  height: clamp(225px, 30vw, 330px);
   margin: 10px -8px 0;
   background-image: radial-gradient(#d9dad4 0.75px, transparent 0.75px);
   background-position: center;

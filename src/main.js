@@ -105,7 +105,7 @@ async function getFeature(place) {
   return found;
 }
 
-function getProjection(place, feature, scale = 1, width = 0, height = 0) {
+function getProjection(place, scale = 1, width = 0, height = 0) {
   const [longitude, latitude] = place.centroid;
   return geoAzimuthalEqualArea()
     .rotate([-longitude, -latitude])
@@ -116,8 +116,26 @@ function getProjection(place, feature, scale = 1, width = 0, height = 0) {
 }
 
 function getProjectedBounds(place, feature) {
-  const projection = getProjection(place, feature);
+  const projection = getProjection(place);
   return geoPath(projection).bounds(feature);
+}
+
+function getPanelDimensions() {
+  const card = elements.leftCanvas.closest(".place-card");
+  const visual = elements.leftCanvas.closest(".shape-visual");
+  const cardStyle = window.getComputedStyle(card);
+  const visualStyle = window.getComputedStyle(visual);
+  const horizontalInsets = [
+    cardStyle.paddingLeft,
+    cardStyle.paddingRight,
+    visualStyle.marginLeft,
+    visualStyle.marginRight
+  ].reduce((total, value) => total + Number.parseFloat(value), 0);
+
+  return {
+    width: Math.max(240, Math.round(card.clientWidth - horizontalInsets)),
+    height: Math.max(210, Math.round(Number.parseFloat(visualStyle.height)))
+  };
 }
 
 function getSharedScale(features, width, height) {
@@ -154,7 +172,7 @@ function appendScaleBar(svg, pixelsPerKm, width, height) {
 }
 
 function drawFeature(svg, item, color, scale, width, height) {
-  const projection = getProjection(item.place, item.feature, scale, width, height);
+  const projection = getProjection(item.place, scale, width, height);
   const path = geoPath(projection);
   const shape = document.createElementNS("http://www.w3.org/2000/svg", "path");
   shape.setAttribute("d", path(item.feature));
@@ -253,13 +271,12 @@ async function render() {
           : "COMPARISON PLACE";
     const leftItem = { place: currentLeft, feature: leftFeature, color: "#e5755d" };
     const rightItem = { place: currentRight, feature: rightFeature, color: "#477c92" };
+    const { width, height } = getPanelDimensions();
+    const sharedScale = getSharedScale([leftItem, rightItem], width, height);
     if (currentView === "overlay") {
       const svg = elements.overlayCanvas;
-      drawCanvas(svg, [leftItem, rightItem], { label: "Overlay of two places at the same scale" });
+      drawCanvas(svg, [leftItem, rightItem], { label: "Overlay of two places at the same scale" }, sharedScale);
     } else {
-      const width = Math.min(elements.leftCanvas.clientWidth, elements.rightCanvas.clientWidth);
-      const height = Math.min(elements.leftCanvas.clientHeight, elements.rightCanvas.clientHeight);
-      const sharedScale = getSharedScale([leftItem, rightItem], width, height);
       drawCanvas(elements.leftCanvas, [leftItem], { label: `${currentLeft.name} boundary` }, sharedScale);
       drawCanvas(elements.rightCanvas, [rightItem], { label: `${currentRight.name} boundary` }, sharedScale);
     }
